@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 const Filter = ({ filter, handleFilterChange }) => {
   return (
     <div>
@@ -46,11 +48,22 @@ const PersonForm = ({
   );
 };
 const App = (props) => {
-  const [persons, setPersons] = useState(props.persons);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
   const [filteredPersons, setFilteredPersons] = useState([]);
+
+  const hook = () => {
+    console.log("effect");
+    axios.get("http://localhost:3001/persons").then((response) => {
+      console.log("promise fulfilled");
+      setPersons(response.data);
+    });
+  };
+
+  useEffect(hook, []);
+  console.log("render", persons.length, "persons");
 
   const addName = (event) => {
     //prevents the default action of submitting a form.
